@@ -1,7 +1,9 @@
 from AllNibblesDifferent import *
+from SomeNibblesRepeated import *
 
 all_classes = [
-    AllNibblesDifferent
+    AllNibblesDifferent,
+    SomeNibblesRepeated
 ]
 
 class FunctionListing(object):

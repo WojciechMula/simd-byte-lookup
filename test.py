@@ -25,6 +25,7 @@ bool test() {
         }
     }
 
+    puts("All OK");
     return true;
 }
 
@@ -38,8 +39,8 @@ int main() {
 def print_program(values):
  
     function = generate('in_set', values)
-    if generate is None:
-        raise ValueError()
+    if function is None:
+        raise ValueError("Don't know how to build lookup for given values")
 
 
     expected_list = ['false'] * 256
