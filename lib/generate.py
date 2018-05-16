@@ -1,9 +1,11 @@
 from AllNibblesDifferent import *
 from SomeNibblesRepeated import *
+from Naive import *
 
 all_classes = [
     AllNibblesDifferent,
-    SomeNibblesRepeated
+    SomeNibblesRepeated,
+    Naive
 ]
 
 class FunctionListing(object):

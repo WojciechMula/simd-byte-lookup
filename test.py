@@ -40,7 +40,7 @@ def print_program(values):
  
     function = generate('in_set', values)
     if function is None:
-        raise ValueError("Don't know how to build lookup for given values")
+        raise ValueError("Don't know how to build lookup for values %s" % values)
 
 
     expected_list = ['false'] * 256
