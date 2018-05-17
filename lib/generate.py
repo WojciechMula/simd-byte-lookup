@@ -1,8 +1,12 @@
 from AllNibblesDifferent import *
 from SomeNibblesRepeated import *
+from LowerNibbleConst import *
+from HigherNibbleConst import *
 from Naive import *
 
 all_classes = [
+    LowerNibbleConst,
+    HigherNibbleConst,
     AllNibblesDifferent,
     SomeNibblesRepeated,
     Naive

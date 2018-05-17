@@ -4,6 +4,9 @@ class Generator(object):
         self.name   = name
         self.__validate()
 
+        self.lower_nibbles  = [x & 0x0f for x in self.values]
+        self.higher_nibbles = [x >> 4 for x in self.values]
+
 
     def __validate(self):
         for i, x in enumerate(self.values):
