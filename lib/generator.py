@@ -1,7 +1,8 @@
 class Generator(object):
-    def __init__(self, values, name):
-        self.values = values
-        self.name   = name
+    def __init__(self, values, builder, name):
+        self.values  = values
+        self.builder = builder
+        self.name    = name
         self.__validate()
 
         self.lower_nibbles  = [x & 0x0f for x in self.values]

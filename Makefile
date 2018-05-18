@@ -5,7 +5,8 @@ FLAGS=-O3 -Wall -Wpedantic -march=native -std=c++11
 ALL=demo1\
     demo2\
     demo3\
-    demo4
+    demo4\
+    demo5
 
 DEPS=test.py lib/*.py
 
@@ -52,7 +53,7 @@ demo4.cpp: $(DEPS)
 	mv /tmp/$@ $@
 
 demo5.cpp: $(DEPS)
-	# lower nibbles const
+	# higher nibbles const
 	python test.py 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3d 0x3f > /tmp/$@
 	mv /tmp/$@ $@
 

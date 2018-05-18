@@ -2,8 +2,8 @@ from generator import Generator
 
 
 class SomeNibblesRepeated(Generator):
-    def __init__(self, values):
-        super(SomeNibblesRepeated, self).__init__(values, "some nibbles repeated")
+    def __init__(self, values, builder):
+        super(SomeNibblesRepeated, self).__init__(values, builder, "some nibbles repeated")
 
 
     def can_generate(self):
@@ -17,11 +17,8 @@ class SomeNibblesRepeated(Generator):
     def do_generate(self):
         listing = []
 
-        lookup_lo = {}
-        lookup_hi = {}
-        for i in xrange(16):
-            lookup_lo[i] = 0
-            lookup_hi[i] = 0
+        lookup_lo = [0] * 16
+        lookup_hi = [0] * 16
 
         for i, x in enumerate(self.values):
             lo = x & 0xf
@@ -33,22 +30,22 @@ class SomeNibblesRepeated(Generator):
             lookup_hi[hi] |= bitmask
         
 
-        def format_lookup(name, lookup):
-            assert len(lookup) == 16
-            tmp = ', '.join('0x%02x' % lookup[i] for i in xrange(16))
-            return 'static const __m128i %s = _mm_setr_epi8(%s)' % (name, tmp)
+        lookup_lo = self.builder.add_lookup(lookup_lo)
+        lookup_hi = self.builder.add_lookup(lookup_hi)
 
-        listing.append(format_lookup('lookup_lo', lookup_lo))
-        listing.append(format_lookup('lookup_hi', lookup_hi))
-        listing.append('const __m128i lo      = _mm_and_si128(in, _mm_set1_epi8(0x0f))')
-        listing.append('const __m128i hi      = _mm_and_si128(_mm_srli_epi16(in, 4), _mm_set1_epi8(0x0f))')
-        listing.append('const __m128i lo_mask = _mm_shuffle_epi8(lookup_lo, lo)')
-        listing.append('const __m128i hi_mask = _mm_shuffle_epi8(lookup_hi, hi)')
-        listing.append('const __m128i t0      = _mm_and_si128(lo_mask, hi_mask)')
-        listing.append('const __m128i t1      = _mm_cmpeq_epi8(t0, _mm_setzero_si128())')
-        listing.append('const __m128i eq      = _mm_xor_si128(t1, _mm_set1_epi32(-1))')
-        listing.append('return eq');
+        lo_mask = self.builder.add_shuffle(lookup_lo, self.builder.get_parameter("lower_nibbles"))
+        hi_mask = self.builder.add_shuffle(lookup_hi, self.builder.get_parameter("higher_nibbles"))
 
-        return listing
+        anded = self.builder.add_and(lo_mask, hi_mask)
+        self.builder.update_result(anded)
 
+        if not self.builder.has_epilog():
+            self.builder.target('epilog')
+
+            result = self.builder.get_parameter("result")
+            zeros  = self.builder.get_parameter("zeros")
+            ones   = self.builder.get_parameter("ones")
+            tmp    = self.builder.add_compare_eq(result, zeros);
+            self.builder.update_result(self.builder.add_xor(tmp, ones))
+            self.builder.target('main')
 
