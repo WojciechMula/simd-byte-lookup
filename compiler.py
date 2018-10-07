@@ -3,7 +3,9 @@ from lib.SomeNibblesRepeated import *
 from lib.LowerNibbleConst import *
 from lib.HigherNibbleConst import *
 from lib.Naive import *
-from lib.generate import generate, FunctionListing
+from lib.generate import FunctionListing
+from lib.builder import make_builder
+from lib.sse_writer import SSEWriter
 
 import sys
 import itertools
@@ -56,7 +58,7 @@ class Compiler(object):
         dump(self.values)
         for subset, cls in data:
             print subset, cls, self.cost(subset)
-            dump(subset)
+            #dump(subset)
 
 
     def cost(self, values):
@@ -99,7 +101,6 @@ def iter_unique_subset(values):
 
     while len(stack) > 0:
         top = stack[-1]
-        #print len(stack), top
 
         top.index += 1
         if top.index == n:
@@ -182,8 +183,14 @@ def main():
     v = parse_args()
 
     compiler = Compiler(v)
-    compiler.compile()
+    data = compiler.compile()
+    builder = make_builder()
+    for subset, cls in data:
+        generator = cls(subset, builder)
+        generator.generate()
 
+    writer = SSEWriter(builder)
+    print '\n'.join(writer.write())
 
 if __name__ == '__main__':
     main()
