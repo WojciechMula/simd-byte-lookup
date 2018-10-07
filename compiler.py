@@ -3,8 +3,9 @@ from lib.SomeNibblesRepeated import *
 from lib.LowerNibbleConst import *
 from lib.HigherNibbleConst import *
 from lib.Naive import *
-from lib.generate import FunctionListing
+from lib.generate import generate, FunctionListing
 
+import sys
 import itertools
 
 
@@ -18,8 +19,6 @@ class Compiler(object):
         result = []
 
         while len(values) > 0:
-
-            print 'input: %s' % values
 
             tmp = []
             tmp.append((
@@ -48,8 +47,14 @@ class Compiler(object):
                 values.remove(x)
 
 
+        self.dump(result)
+
+        return result
+
+
+    def dump(self, data):
         dump(self.values)
-        for subset, cls in result:
+        for subset, cls in data:
             print subset, cls, self.cost(subset)
             dump(subset)
 
@@ -156,12 +161,29 @@ def dump(values):
         print
 
 
+def parse_args():
+    v = set()
+    for arg in sys.argv[1:]:
+        prefix = '--string='
+        if arg.startswith(prefix):
+            for c in arg[len(prefix):]:
+                v.add(ord(c))
+        else:
+            try:
+                v.add(int(arg))
+            except ValueError:
+                v.add(int(arg, 16))
+
+    return list(v)
+
 def main():
-    v = [ord(c) for c in "0123456789()+-*=<>[]{}/%!"]
+    #v = [ord(c) for c in "0123456789()+-*=<>[]{}/%!"]
     #v = [0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66]
+    v = parse_args()
 
     compiler = Compiler(v)
     compiler.compile()
 
 
-main()
+if __name__ == '__main__':
+    main()
