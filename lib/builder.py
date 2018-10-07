@@ -15,7 +15,6 @@ class Builder(object):
         self.temporaries    = OrderedDict()
         self.parameters     = {}
         self.instructions   = []
-        self.prolog         = []
         self.epilog         = []
         self.current_list   = self.instructions
 
@@ -51,7 +50,6 @@ class Builder(object):
         for values, name in self.lookups.iteritems():
             result.append(Instruction(name, "declare_lookup", (values,)))
 
-        result.extend(self.prolog)
         result.extend(self.instructions)
         result.extend(self.epilog)
         result.append(Instruction(self.get_parameter("result"), "return", None))
