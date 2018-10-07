@@ -10,6 +10,36 @@ from lib.sse_writer import SSEWriter
 import sys
 import itertools
 
+class Candidate(object):
+    __slots__ = ["values", "cls", "instruction_count", "cost"]
+
+    def __init__(self, values, cls):
+        self.values = values
+        self.cls    = cls
+
+        self.instruction_count  = self.__calculate_instruction_count()
+        self.cost               = self.__calculate_cost()
+
+
+    def __str__(self):
+        return '%s [%d/%0.2f=%0.3f] %s' % (self.values, len(self.values), self.instruction_count, self.cost, self.cls)
+
+
+    def __calculate_instruction_count(self):
+        builder   = make_builder()
+        generator = self.cls(self.values, builder)
+        generator.generate()
+
+        return len(builder.instructions) + 0.5 * len(builder.lookups)
+
+
+    def __calculate_cost(self):
+
+        items_covered = len(self.values)
+        instr_per_item = float(items_covered) / self.instruction_count
+
+        return instr_per_item
+
 
 class Compiler(object):
     def __init__(self, values):
@@ -23,31 +53,32 @@ class Compiler(object):
         while len(values) > 0:
 
             tmp = []
-            tmp.append((
+            tmp.append(Candidate(
                 find_const_nibble(values, lambda byte: byte & 0x0f),
                 LowerNibbleConst
             ))
 
-            tmp.append((
+            tmp.append(Candidate(
                 find_const_nibble(values, lambda byte: byte >> 4),
                 HigherNibbleConst
             ))
 
-            tmp.append((
+            tmp.append(Candidate(
                 findbest_unique(values),
                 AllNibblesDifferent
             ))
 
-            tmp.append((
+            tmp.append(Candidate(
                 values[:8],
                 SomeNibblesRepeated
             ))
 
-            best = max(tmp, key=lambda item: self.cost(item[0]))
+            best = max(tmp, key=lambda item: item.cost)
             result.append(best)
-            for x in best[0]:
+            for x in best.values:
                 values.remove(x)
 
+            self.dump(tmp)
 
         self.dump(result)
 
@@ -56,13 +87,12 @@ class Compiler(object):
 
     def dump(self, data):
         dump(self.values)
-        for subset, cls in data:
-            print subset, cls, self.cost(subset)
+        for item in data:
+            print item
             #dump(subset)
 
 
-    def cost(self, values):
-        return len(values)
+
 
 
 def find_const_nibble(values, keyfun):
@@ -185,8 +215,8 @@ def main():
     compiler = Compiler(v)
     data = compiler.compile()
     builder = make_builder()
-    for subset, cls in data:
-        generator = cls(subset, builder)
+    for item in data:
+        generator = item.cls(item.values, builder)
         generator.generate()
 
     writer = SSEWriter(builder)
