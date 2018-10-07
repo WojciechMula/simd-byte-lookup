@@ -73,6 +73,18 @@ class Compiler(object):
                 SomeNibblesRepeated
             ))
 
+            for i in xrange(1, len(values)):
+                tmp.append(Candidate(
+                    values[:i],
+                    Naive
+                ))
+
+            if len(values) == 1:
+                tmp.append(Candidate(
+                    [values[0]],
+                    Naive
+                ))
+
             best = max(tmp, key=lambda item: item.cost)
             result.append(best)
             for x in best.values:
