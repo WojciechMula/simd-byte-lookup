@@ -1,7 +1,7 @@
-from generator import Generator
+from GeneratorBase import *
 
 
-class Naive(Generator):
+class Naive(GeneratorBase):
     def __init__(self, values, builder):
         super(Naive, self).__init__(values, builder, "naive")
 

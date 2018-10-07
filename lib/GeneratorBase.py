@@ -1,4 +1,4 @@
-class Generator(object):
+class GeneratorBase(object):
     def __init__(self, values, builder, name):
         self.values  = values
         self.builder = builder

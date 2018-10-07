@@ -1,7 +1,7 @@
-from generator import Generator
+from GeneratorBase import *
 
 
-class HigherNibbleConst(Generator):
+class HigherNibbleConst(GeneratorBase):
     def __init__(self, values, builder):
         super(HigherNibbleConst, self).__init__(values, builder, "higher nibble constant")
 

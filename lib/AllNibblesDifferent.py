@@ -1,7 +1,7 @@
-from generator import Generator
+from GeneratorBase import *
 
 
-class AllNibblesDifferent(Generator):
+class AllNibblesDifferent(GeneratorBase):
     def __init__(self, values, builder):
         super(AllNibblesDifferent, self).__init__(values, builder, "all nibbles different")
 
