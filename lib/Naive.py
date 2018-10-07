@@ -2,19 +2,18 @@ from GeneratorBase import *
 
 
 class Naive(GeneratorBase):
-    def __init__(self, values, builder):
-        super(Naive, self).__init__(values, builder, "naive")
+    def __init__(self, values):
+        super(Naive, self).__init__(values, "naive")
 
 
     def can_generate(self):
         return True
 
 
-    def do_generate(self):
-        bld = self.builder
+    def do_generate(self, builder):
 
-        input = bld.get_parameter("input")
+        input = builder.get_parameter("input")
         for x in self.values:
-            eq = bld.add_compare_eq_byte(input, x)
-            bld.update_result(eq)
+            eq = builder.add_compare_eq_byte(input, x)
+            builder.update_result(eq)
 

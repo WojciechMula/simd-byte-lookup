@@ -2,8 +2,8 @@ from GeneratorBase import *
 
 
 class SomeNibblesRepeated(GeneratorBase):
-    def __init__(self, values, builder):
-        super(SomeNibblesRepeated, self).__init__(values, builder, "some nibbles repeated")
+    def __init__(self, values):
+        super(SomeNibblesRepeated, self).__init__(values, "some nibbles repeated")
 
 
     def can_generate(self):
@@ -14,7 +14,7 @@ class SomeNibblesRepeated(GeneratorBase):
         return True
 
 
-    def do_generate(self):
+    def do_generate(self, builder):
         listing = []
 
         lookup_lo = [0] * 16
@@ -30,22 +30,22 @@ class SomeNibblesRepeated(GeneratorBase):
             lookup_hi[hi] |= bitmask
         
 
-        lookup_lo = self.builder.add_lookup(lookup_lo)
-        lookup_hi = self.builder.add_lookup(lookup_hi)
+        lookup_lo = builder.add_lookup(lookup_lo)
+        lookup_hi = builder.add_lookup(lookup_hi)
 
-        lo_mask = self.builder.add_shuffle(lookup_lo, self.builder.get_parameter("lower_nibbles"))
-        hi_mask = self.builder.add_shuffle(lookup_hi, self.builder.get_parameter("higher_nibbles"))
+        lo_mask = builder.add_shuffle(lookup_lo, builder.get_parameter("lower_nibbles"))
+        hi_mask = builder.add_shuffle(lookup_hi, builder.get_parameter("higher_nibbles"))
 
-        anded = self.builder.add_and(lo_mask, hi_mask)
-        self.builder.update_result(anded)
+        anded = builder.add_and(lo_mask, hi_mask)
+        builder.update_result(anded)
 
-        if not self.builder.has_epilog():
-            self.builder.target('epilog')
+        if not builder.has_epilog():
+            builder.target('epilog')
 
-            result = self.builder.get_parameter("result")
-            zeros  = self.builder.get_parameter("zeros")
-            ones   = self.builder.get_parameter("ones")
-            tmp    = self.builder.add_compare_eq(result, zeros);
-            self.builder.update_result(self.builder.add_xor(tmp, ones))
-            self.builder.target('main')
+            result = builder.get_parameter("result")
+            zeros  = builder.get_parameter("zeros")
+            ones   = builder.get_parameter("ones")
+            tmp    = builder.add_compare_eq(result, zeros);
+            builder.update_result(builder.add_xor(tmp, ones))
+            builder.target('main')
 

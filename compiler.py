@@ -27,8 +27,8 @@ class Candidate(object):
 
     def __calculate_instruction_count(self):
         builder   = make_builder()
-        generator = self.cls(self.values, builder)
-        generator.generate()
+        generator = self.cls(self.values)
+        generator.generate(builder)
 
         return len(builder.instructions) + 0.5 * len(builder.lookups)
 
@@ -228,8 +228,8 @@ def main():
     data = compiler.compile()
     builder = make_builder()
     for item in data:
-        generator = item.cls(item.values, builder)
-        generator.generate()
+        generator = item.cls(item.values)
+        generator.generate(builder)
 
     writer = SSEWriter(builder)
     print '\n'.join(writer.write())

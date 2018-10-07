@@ -2,8 +2,8 @@ from GeneratorBase import *
 
 
 class AllNibblesDifferent(GeneratorBase):
-    def __init__(self, values, builder):
-        super(AllNibblesDifferent, self).__init__(values, builder, "all nibbles different")
+    def __init__(self, values):
+        super(AllNibblesDifferent, self).__init__(values, "all nibbles different")
 
 
     def can_generate(self):
@@ -17,18 +17,18 @@ class AllNibblesDifferent(GeneratorBase):
         return len(lower_nibbles) == n and len(higer_nibbles) == n
 
 
-    def do_generate(self):
+    def do_generate(self, builder):
         lookup_lo_table = self.__generate_lookup_values((x & 0xf for x in self.values), 0x10)
         lookup_hi_table = self.__generate_lookup_values((x >> 4 for x in self.values),  0x20)
 
-        lookup_lo = self.builder.add_lookup(lookup_lo_table)
-        lookup_hi = self.builder.add_lookup(lookup_hi_table)
+        lookup_lo = builder.add_lookup(lookup_lo_table)
+        lookup_hi = builder.add_lookup(lookup_hi_table)
 
-        lo_idx = self.builder.add_shuffle(lookup_lo, self.builder.get_parameter("lower_nibbles"))
-        hi_idx = self.builder.add_shuffle(lookup_hi, self.builder.get_parameter("higher_nibbles"))
+        lo_idx = builder.add_shuffle(lookup_lo, builder.get_parameter("lower_nibbles"))
+        hi_idx = builder.add_shuffle(lookup_hi, builder.get_parameter("higher_nibbles"))
         
-        tmp = self.builder.add_compare_eq(lo_idx, hi_idx)
-        self.builder.update_result(tmp)
+        tmp = builder.add_compare_eq(lo_idx, hi_idx)
+        builder.update_result(tmp)
 
 
     def __generate_lookup_values(self, values, invalid_value):

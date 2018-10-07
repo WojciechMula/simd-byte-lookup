@@ -37,9 +37,9 @@ class FunctionListing(object):
         self.image = '\n'.join(l)
 
 
-def get_generator(values, builder):
+def get_generator(values):
     for class_name in all_classes:
-        generator = class_name(values, builder)
+        generator = class_name(values)
         if generator.can_generate():
             return generator
 
@@ -47,8 +47,8 @@ def get_generator(values, builder):
 def generate(function_name, values):
  
     builder = make_builder()
-    generator = get_generator(values, builder)
-    generator.generate()
+    generator = get_generator(values)
+    generator.generate(builder)
     writer = SSEWriter(builder)
     return FunctionListing(generator.name, function_name, writer.write())
 

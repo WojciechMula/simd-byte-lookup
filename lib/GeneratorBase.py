@@ -1,7 +1,6 @@
 class GeneratorBase(object):
-    def __init__(self, values, builder, name):
+    def __init__(self, values, name):
         self.values  = values
-        self.builder = builder
         self.name    = name
         self.__validate()
 
@@ -23,11 +22,11 @@ class GeneratorBase(object):
         raise False
 
 
-    def generate(self):
+    def generate(self, builder):
         if not self.can_generate():
             raise ValueError('Generator is not able to generate code for given values')
         
-        return self.do_generate()
+        return self.do_generate(builder)
 
 
     def do_generate(self):
