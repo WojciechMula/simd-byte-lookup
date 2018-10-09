@@ -3,6 +3,7 @@ from SomeNibblesRepeated import *
 from LowerNibbleConst import *
 from HigherNibbleConst import *
 from Naive import *
+from Range import *
 from builder import make_builder
 from sse_writer import SSEWriter
 
@@ -11,7 +12,8 @@ all_classes = [
     HigherNibbleConst,
     AllNibblesDifferent,
     SomeNibblesRepeated,
-    Naive
+    Naive,
+    Range,
 ]
 
 class FunctionListing(object):

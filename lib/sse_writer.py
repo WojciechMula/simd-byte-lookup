@@ -60,11 +60,27 @@ class SSEWriter(Writer):
         return self.__binary_fun(target, '_mm_cmpeq_epi8', vector, const_vector)
 
 
+    def handle__cmplt_byte(self, target, attr):
+        vector = attr[0]
+        byte   = attr[1]
+
+        const_vector = '_mm_set1_epi8(%s)' % self.format_byte_const(byte)
+
+        return self.__binary_fun(target, '_mm_cmplt_epi8', vector, const_vector)
+
+
     def handle__and(self, target, attr):
         a = attr[0]
         b = attr[1]
 
         return self.__binary_fun(target, '_mm_and_si128', a, b)
+
+
+    def handle__andnot(self, target, attr):
+        a = attr[0]
+        b = attr[1]
+
+        return self.__binary_fun(target, '_mm_andnot_si128', a, b)
 
 
     def handle__xor(self, target, attr):

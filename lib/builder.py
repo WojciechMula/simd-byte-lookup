@@ -112,8 +112,18 @@ class Builder(object):
         return self.add_raw('cmpeq_byte', (a, value))
 
 
+    def add_compare_lt_byte(self, a, value):
+        assert value >= 0
+        assert value < 256
+        return self.add_raw('cmplt_byte', (a, value))
+
+
     def add_and(self, a, b):
         return self.add_raw('and', (a, b))
+
+
+    def add_andnot(self, a, b):
+        return self.add_raw('andnot', (a, b))
 
 
     def add_xor(self, a, b):
