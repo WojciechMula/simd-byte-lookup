@@ -21,6 +21,10 @@ class Writer(object):
         return result
 
 
+    def get_type_name(self):
+        raise NotImplementedError()
+
+
     def format_byte_const(self, x):
         if x & 0x80:
             x = (~x + 1) & 0xff

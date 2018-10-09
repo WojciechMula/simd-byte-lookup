@@ -8,6 +8,10 @@ class SSEWriter(Writer):
         self.result_action = 'set'
 
 
+    def get_type_name(self):
+        return self.type
+
+
     def handle__get_lower_nibbles(self, target, attr):
         input = attr[0]
         return 'const %s %s = _mm_and_si128(%s, _mm_set1_epi8(0x0f))' % (self.type, target, input)
