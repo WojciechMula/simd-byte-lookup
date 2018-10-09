@@ -7,14 +7,14 @@ from Range import *
 from builder import make_builder
 from sse_writer import SSEWriter
 
-all_classes = [
-    LowerNibbleConst,
-    HigherNibbleConst,
-    AllNibblesDifferent,
-    SomeNibblesRepeated,
-    Naive,
-    Range,
-]
+all_classes = {
+    'LowerNibbleConst'      : LowerNibbleConst,
+    'HigherNibbleConst'     : HigherNibbleConst,
+    'AllNibblesDifferent'   : AllNibblesDifferent,
+    'SomeNibblesRepeated'   : SomeNibblesRepeated,
+    'Naive'                 : Naive,
+    'Range'                 : Range,
+}
 
 class FunctionListing(object):
     def __init__(self, generator_name, function_name, code):
@@ -39,17 +39,24 @@ class FunctionListing(object):
         self.image = '\n'.join(l)
 
 
-def get_generator(values):
-    for class_name in all_classes:
-        generator = class_name(values)
-        if generator.can_generate():
-            return generator
+def get_generator(generator_name, values):
+    try:
+        class_name = all_classes[generator_name]
+    except KeyError:
+        names = ', '.join(sorted(list(all_classes.iterkeys())))
+        raise ValueError("Invalid generator name, valid names are: %s" % (names))
+
+    generator = class_name(values)
+    if not generator.can_generate():
+        raise ValueError("Selected generator can't handle given values")
+    
+    return generator
 
 
-def generate(function_name, values):
- 
+def generate(generator_name, values, function_name):
+
     builder = make_builder()
-    generator = get_generator(values)
+    generator = get_generator(generator_name, values)
     generator.generate(builder)
     writer = SSEWriter(builder)
     return FunctionListing(generator.name, function_name, writer.write())

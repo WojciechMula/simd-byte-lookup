@@ -10,6 +10,11 @@ from lib.sse_writer import SSEWriter
 import sys
 import itertools
 
+class Options:
+    def __init__(self):
+        self.dump_candidates = True
+
+
 class Candidate(object):
     __slots__ = ["values", "cls", "instruction_count", "cost"]
 
@@ -102,9 +107,6 @@ class Compiler(object):
         for item in data:
             print item
             #dump(subset)
-
-
-
 
 
 def find_const_nibble(values, keyfun):

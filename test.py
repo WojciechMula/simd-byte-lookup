@@ -36,9 +36,9 @@ int main() {
 
 """
 
-def print_program(values):
+def print_program(generator_name, values):
  
-    function = generate('in_set', values)
+    function = generate(generator_name, values, 'in_set')
     if function is None:
         raise ValueError("Don't know how to build lookup for values %s" % values)
 
@@ -58,8 +58,10 @@ def print_program(values):
 
 
 def main():
-    values = [int(arg, 16) for arg in sys.argv[1:]]
-    print_program(values)
+    args = sys.argv[1:]
+    generator_name = args[0]
+    values = [int(arg, 16) for arg in args[1:]]
+    print_program(generator_name, values)
 
 
 if __name__ == '__main__':
