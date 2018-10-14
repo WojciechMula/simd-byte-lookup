@@ -15,8 +15,12 @@ class Writer(object):
             except AttributeError:
                 raise ValueError("Can't handle opcode '%s'" % name)
 
-            line = handler(target, arguments)
-            result.append(line)
+            ret = handler(target, arguments)
+            if type(ret) is str:
+                result.append(ret)
+            else:
+                assert type(ret) is list
+                result.extend(ret)
 
         return result
 

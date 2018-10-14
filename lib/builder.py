@@ -130,6 +130,10 @@ class Builder(object):
         return self.add_raw('xor', (a, b))
 
 
+    def add_select(self, x, t, f):
+        return self.add_raw('select', (x, t, f))
+
+
     def update_result(self, value):
         target = self.get_parameter('result')
         self.current_list.append(Instruction(target, 'update_result', (value,)))

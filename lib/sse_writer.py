@@ -47,6 +47,10 @@ class SSEWriter(Writer):
     def __binary_fun(self, target, function, arg1, arg2):
         return 'const %s %s = %s(%s, %s)' % (self.type, target, function, arg1, arg2)
 
+    
+    def __ternary_fun(self, target, function, arg1, arg2, arg3):
+        return 'const %s %s = %s(%s, %s, %s)' % (self.type, target, function, arg1, arg2, arg3)
+
 
     def handle__cmpeq(self, target, attr):
         a = attr[0]
@@ -92,6 +96,14 @@ class SSEWriter(Writer):
         b = attr[1]
 
         return self.__binary_fun(target, '_mm_xor_si128', a, b)
+
+
+    def handle__select(self, target, attr):
+        cond  = attr[0]
+        true  = attr[1]
+        false = attr[2]
+
+        return self.__ternary_fun(target, '_mm_blendv_epi8', false, true, cond)
 
 
     def handle__update_result(self, target, attr):

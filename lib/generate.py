@@ -4,6 +4,7 @@ from LowerNibbleConst import *
 from HigherNibbleConst import *
 from Naive import *
 from Range import *
+from Universal import *
 from builder import make_builder
 from sse_writer import SSEWriter
 
@@ -14,6 +15,7 @@ all_classes = {
     'SomeNibblesRepeated'   : SomeNibblesRepeated,
     'Naive'                 : Naive,
     'Range'                 : Range,
+    'Universal'             : Universal,
 }
 
 class FunctionListing(object):
