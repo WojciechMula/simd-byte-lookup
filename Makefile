@@ -12,7 +12,6 @@ ALL=demo1\
 
 DEPS=lib/*.py
 DEPS_TEST=test.py $(DEPS)
-DEPS_COMPILER=compiler.py $(DEPS)
 
 run: $(ALL)
 	./demo1
@@ -44,7 +43,6 @@ demo7: demo7.cpp
 	$(CXX) $(FLAGS) $< -o $@
 
 demo1.cpp: $(DEPS_TEST)
-	# all nibbles (lower & higer) are different
 	python test.py AllNibblesDifferent 0x20 0x31 0x42 0x53 0x64 0x75 0x86 0x97 0xa8 0xb9 0xca > /tmp/$@
 	mv /tmp/$@ $@
 
@@ -71,9 +69,6 @@ demo6.cpp: $(DEPS_TEST)
 demo7.cpp: $(DEPS_TEST)
 	python test.py Universal 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0xff 0x14 0x7a 0x45 0x00 0x9d > /tmp/$@
 	mv /tmp/$@ $@
-
-test_compiler: $(DEPS_COMPILER)
-	python compiler.py --string=abcdeghijlmnop012346789/+-
 
 clean:
 	$(RM) demo*
