@@ -98,6 +98,12 @@ class Builder(object):
         return name
 
 
+    def byte_const(self, value):
+        assert 0 <= value <= 255
+
+        return self.add_raw('byte_const', (value,))
+
+
     def add_shuffle(self, lookup_name, vector):
         return self.add_raw('shuffle', (lookup_name, vector))
 
@@ -120,6 +126,10 @@ class Builder(object):
 
     def add_and(self, a, b):
         return self.add_raw('and', (a, b))
+
+
+    def add_or(self, a, b):
+        return self.add_raw('or', (a, b))
 
 
     def add_andnot(self, a, b):

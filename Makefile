@@ -8,7 +8,8 @@ ALL=demo1\
     demo4\
     demo5\
     demo6\
-    demo7
+    demo7\
+    demo8
 
 DEPS=lib/*.py
 DEPS_TEST=test.py $(DEPS)
@@ -20,6 +21,8 @@ run: $(ALL)
 	./demo4
 	./demo5
 	./demo6
+	./demo7
+	./demo8
 
 demo1: demo1.cpp
 	$(CXX) $(FLAGS) $< -o $@
@@ -40,6 +43,9 @@ demo6: demo6.cpp
 	$(CXX) $(FLAGS) $< -o $@
 
 demo7: demo7.cpp
+	$(CXX) $(FLAGS) $< -o $@
+
+demo8: demo8.cpp
 	$(CXX) $(FLAGS) $< -o $@
 
 demo1.cpp: $(DEPS_TEST)
@@ -68,6 +74,10 @@ demo6.cpp: $(DEPS_TEST)
 
 demo7.cpp: $(DEPS_TEST)
 	python test.py Universal 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0xff 0x14 0x7a 0x45 0x00 0x9d > /tmp/$@
+	mv /tmp/$@ $@
+
+demo8.cpp: $(DEPS_TEST)
+	python test.py Universal2 0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x3a 0x3b 0x3c 0x3d 0x3e 0xff 0x14 0x7a 0x45 0x00 0x9d > /tmp/$@
 	mv /tmp/$@ $@
 
 clean:

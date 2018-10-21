@@ -37,6 +37,12 @@ class SSEWriter(Writer):
         return 'static const %s %s = _mm_setr_epi8(%s)' % (self.type, target, tmp)
 
 
+    def handle__byte_const(self, target, attr):
+        value = attr[0]
+
+        return 'const %s %s = _mm_set1_epi8(%s)' % (self.type, target, self.format_byte_const(value))
+    
+
     def handle__shuffle(self, target, attr):
         lookup = attr[0]
         vector = attr[1]
@@ -82,6 +88,13 @@ class SSEWriter(Writer):
         b = attr[1]
 
         return self.__binary_fun(target, '_mm_and_si128', a, b)
+
+
+    def handle__or(self, target, attr):
+        a = attr[0]
+        b = attr[1]
+
+        return self.__binary_fun(target, '_mm_or_si128', a, b)
 
 
     def handle__andnot(self, target, attr):

@@ -19,7 +19,7 @@ class GeneratorBase(object):
 
 
     def can_generate(self):
-        raise False
+        return False
 
 
     def generate(self, builder):

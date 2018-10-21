@@ -16,6 +16,7 @@ all_classes = {
     'Naive'                 : Naive,
     'Range'                 : Range,
     'Universal'             : Universal,
+    'Universal2'            : Universal2,
 }
 
 class FunctionListing(object):
